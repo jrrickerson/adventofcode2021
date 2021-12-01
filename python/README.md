@@ -13,7 +13,7 @@ Pipfile and Pipfile.lock are provided for use with [pipenv](https://pipenv.pypa.
 The Python solution directory makes use of `make` to automate setup, testing, and solution execution.  While not required to run the solutions, it makes my workflow more convenient.
 
 ### Environment variables / make parameters
-**DAY**: Specify which day you want to work on, used by most targets 
+**DAY**: Specify which day you want to work on, used by most targets   
 Examples:
 `$ make setup DAY=1`  
 ```
