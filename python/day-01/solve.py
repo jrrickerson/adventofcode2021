@@ -1,5 +1,18 @@
 
 
+def sliding_windows(measurement_list, window=3):
+    sums = []
+    if len(measurement_list) < window:
+        return sums
+    for i in range(0, len(measurement_list)):
+        window_list = measurement_list[i:i+window]
+        if len(window_list) < window:
+            break
+        window_sum = sum(window_list)
+        sums.append(window_sum)
+    return sums
+
+
 def load_depth_list(file_obj):
     return [int(line.strip()) for line in file_obj if line.strip()]
 
@@ -23,12 +36,20 @@ def part_1(input_file):
     return increases
 
 
+def part_2(input_file):
+    depth_list = load_depth_list(open(input_file))
+    windows = sliding_windows(depth_list, window=3)
+    increases = count_increases(windows)
+    return increases
+
+
 def main(filename):
     part_1_result = part_1(filename)
+    part_2_result = part_2(filename)
 
     solution = f"""
     Part 1: {part_1_result}
-    Part 2:
+    Part 2: {part_2_result}
     """
     return solution
 

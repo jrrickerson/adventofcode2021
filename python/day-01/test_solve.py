@@ -50,7 +50,7 @@ def test_count_increases_all_decreases():
     assert 0 == increases
 
 
-def test_count_increases_sample_puzzle_input():
+def test_part_1_sample_input():
     depth_list = [
         199,
         200,
@@ -109,3 +109,63 @@ def test_load_depth_list_ignore_empty_lines():
     depth_list = solve.load_depth_list(file_obj)
 
     assert depth_list == [100, 200, 300, 400, 500]
+
+
+def test_sliding_windows_empty_list():
+    measurements = []
+
+    sums = solve.sliding_windows(measurements)
+
+    assert sums == []
+
+
+def test_sliding_windows_not_enough_measurements():
+    measurements = [100, 200]
+
+    sums = solve.sliding_windows(measurements, window=3)
+
+    assert sums == []
+
+
+def test_sliding_windows_sum_of_measurements():
+    measurements = [100, 200, 300]
+
+    sums = solve.sliding_windows(measurements, window=3)
+
+    assert sums == [600]
+
+
+def test_sliding_windows_sum_per_window():
+    measurements = [100, 200, 300, 10]
+
+    sums = solve.sliding_windows(measurements, window=3)
+
+    assert sums == [600, 510]
+
+
+def test_sliding_windows_extra_measurements_ignored():
+    measurements = [100, 200, 300, 10, 20]
+
+    sums = solve.sliding_windows(measurements, window=3)
+
+    assert sums == [600, 510, 330]
+
+
+def test_part_2_sample_input():
+    depth_list = [
+        199,
+        200,
+        208,
+        210,
+        200,
+        207,
+        240,
+        269,
+        260,
+        263,
+    ]
+    sums = solve.sliding_windows(depth_list, window=3)
+    print(sums)
+    increases = solve.count_increases(sums)
+
+    assert 5 == increases
