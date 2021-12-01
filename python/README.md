@@ -9,36 +9,34 @@ Pipfile and Pipfile.lock are provided for use with [pipenv](https://pipenv.pypa.
 `requirements.txt` is provided for use with `pip`
 
 
-## Makefile
+## Makefile Usage
 The Python solution directory makes use of `make` to automate setup, testing, and solution execution.  While not required to run the solutions, it makes my workflow more convenient.
 
-### How to use the Makefile
-
-#### Environment variables / make parameters
+### Environment variables / make parameters
 **DAY**: Specify which day you want to work on, used by most targets 
 Examples:
-`make setup DAY=1`  
+`$ make setup DAY=1`  
 ```
-export DAY=1
-make setup
-make test
-make solve
+$ export DAY=1
+$ make setup
+$ make test
+$ make solve
 ```
 **URL**: Optional URL to display with the puzzle solution, used by the `setup` target
 
-#### Targets
+### Targets
 - `setup`: Create a new directory and insert a boilerplate solution script for day `$DAY`
 - `edit`: Edit the `$DAY` solution file using the tool specified by `$EDITOR`
 - `solve`: Run the Python solution script for day `$DAY`
 - `timer`: Run the Python solution script for day `$DAY` using `time`
 - `test`: Run Python unit tests for day `$DAY` via `$TEST_RUNTIME`
 
-#### Example Workflow
+### Example Workflow
 ```
-export DAY=1
-make setup
-make edit
+$ export DAY=1
+$ make setup
+$ make edit
 <...edit solution code...>
-make test
-make solve
+$ make test
+$ make solve
 ```
