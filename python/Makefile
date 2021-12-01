@@ -4,7 +4,7 @@ DAY_NAME = $(shell printf "%02g" $(DAY))
 DAY_DIR = day-$(DAY_NAME)
 EDITOR=vim
 RUNTIME=python3
-TEST_RUNTIME="pytest -v"
+TEST_RUNTIME="pytest"
 
 
 # Create a new directory for solving a new day
