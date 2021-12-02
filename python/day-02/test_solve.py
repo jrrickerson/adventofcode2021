@@ -130,3 +130,22 @@ def test_Vector2_scale_negative():
     # Ensure original vectors didn't change
     assert v1.x == v1_x
     assert v1.y == v1_y
+
+
+def test_part1_sample_input():
+    sample_data = [
+        "forward 5",
+        "down 5",
+        "forward 8",
+        "up 3",
+        "down 8",
+        "forward 2",
+    ]
+
+    vectors = [solve.command_to_vector2(command) for command in sample_data]
+    end_vector = sum(vectors, start=solve.Vector2(0, 0))
+    result = end_vector.x * end_vector.y
+
+    assert end_vector.x == 15
+    assert end_vector.y == 10
+    assert result == 150
