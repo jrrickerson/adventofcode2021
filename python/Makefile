@@ -4,7 +4,8 @@ DAY_NAME = $(shell printf "%02g" $(DAY))
 DAY_DIR = day-$(DAY_NAME)
 EDITOR=vim
 RUNTIME=python3
-TEST_RUNTIME="pytest"
+TEST_RUNTIME="coverage"
+TEST_OPTIONS=run -m pytest
 
 
 # Create a new directory for solving a new day
@@ -12,6 +13,7 @@ setup:
 	mkdir -p $(DAY_DIR)
 	test ! -e "$(DAY_DIR)/solve.py" && \
 		jinja2 solve.py.j2 -D DAY=$(DAY) -D URL="$(URL)" > $(DAY_DIR)/solve.py
+	touch "$(DAY_DIR)/test_solve.py"
 
 # Open solution script in editor
 edit:
@@ -27,4 +29,4 @@ timer:
 
 # Run Pytest on the current day
 test:
-	$(TEST_RUNTIME) $(DAY_DIR)
+	$(TEST_RUNTIME) $(TEST_OPTIONS) $(DAY_DIR)
