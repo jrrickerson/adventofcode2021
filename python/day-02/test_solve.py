@@ -133,7 +133,7 @@ def test_Vector2_scale_negative():
 
 
 def test_part1_sample_input():
-    sample_data = [
+    sample_commands = [
         "forward 5",
         "down 5",
         "forward 8",
@@ -142,10 +142,98 @@ def test_part1_sample_input():
         "forward 2",
     ]
 
-    vectors = [solve.command_to_vector2(command) for command in sample_data]
-    end_vector = sum(vectors, start=solve.Vector2(0, 0))
-    result = end_vector.x * end_vector.y
+    result = solve.part_1(sample_commands)
 
-    assert end_vector.x == 15
-    assert end_vector.y == 10
     assert result == 150
+
+
+def test_Vector2_magnitude_y_axis():
+    expected = 5
+    vec = solve.Vector2(0, 5)
+
+    assert vec.magnitude == expected
+
+
+def test_Vector2_magnitude_x_axis():
+    expected = 7
+    vec = solve.Vector2(7, 0)
+
+    assert vec.magnitude == expected
+
+
+def test_Vector2_magnitude_zero():
+    expected = 0
+    vec = solve.Vector2(0, 0)
+
+    assert vec.magnitude == expected
+
+
+def test_command_to_pos_aim_vectors_down():
+    """Down command:  No change in position, positive change in aim"""
+    command = "down 1"
+
+    vec_pos, vec_aim = solve.command_to_pos_aim_vectors(command)
+
+    assert isinstance(vec_pos, solve.Vector2)
+    assert isinstance(vec_aim, solve.Vector2)
+    assert vec_pos.x == 0
+    assert vec_pos.y == 0
+    assert vec_aim.x == 0
+    assert vec_aim.y == 1
+
+
+def test_command_to_pos_aim_vectors_up():
+    """Up command:  No change in position, negative change in aim"""
+    command = "up 1"
+
+    vec_pos, vec_aim = solve.command_to_pos_aim_vectors(command)
+
+    assert isinstance(vec_pos, solve.Vector2)
+    assert isinstance(vec_aim, solve.Vector2)
+    assert vec_pos.x == 0
+    assert vec_pos.y == 0
+    assert vec_aim.x == 0
+    assert vec_aim.y == -1
+
+
+def test_command_to_pos_aim_vectors_forward():
+    """Forward command:  Positive change in position, no change in aim"""
+    command = "forward 1"
+
+    vec_pos, vec_aim = solve.command_to_pos_aim_vectors(command)
+
+    assert isinstance(vec_pos, solve.Vector2)
+    assert isinstance(vec_aim, solve.Vector2)
+    assert vec_pos.x == 1
+    assert vec_pos.y == 0
+    assert vec_aim.x == 0
+    assert vec_aim.y == 0
+
+
+def test_command_to_pos_aim_vectors_reverse():
+    """Forward command:  Negative change in position, no change in aim"""
+    command = "reverse 1"
+
+    vec_pos, vec_aim = solve.command_to_pos_aim_vectors(command)
+
+    assert isinstance(vec_pos, solve.Vector2)
+    assert isinstance(vec_aim, solve.Vector2)
+    assert vec_pos.x == -1
+    assert vec_pos.y == 0
+    assert vec_aim.x == 0
+    assert vec_aim.y == 0
+
+
+def test_part2_sample_input():
+    sample_commands = [
+        "forward 5",
+        "down 5",
+        "forward 8",
+        "up 3",
+        "down 8",
+        "forward 2",
+    ]
+
+    result = solve.part_2(sample_commands)
+    assert result == 900
+

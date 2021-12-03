@@ -1,3 +1,6 @@
+import math
+
+
 class Vector2:
     """Two-dimensional vector for doing basic calculations
        because vector math is fun, right?"""
@@ -21,7 +24,12 @@ class Vector2:
     def scale(self, scalar):
         return Vector2(self.x * scalar, self.y * scalar)
 
+    @property
+    def magnitude(self):
+        return abs(math.sqrt(self.x ** 2 + self.y ** 2))
 
+
+# Map commands to specific direction vectors
 VECTOR_COMMAND_MAP = {
     "down": Vector2(0, 1),
     "up": Vector2(0, -1),
@@ -29,4 +37,10 @@ VECTOR_COMMAND_MAP = {
     "reverse": Vector2(-1, 0),
 }
 
-
+# Map command to specific position change vector and aim change vector
+POSITION_AIM_COMMAND_MAP = {
+    "down": (Vector2(0, 0), Vector2(0, 1)),
+    "up": (Vector2(0, 0), Vector2(0, -1)),
+    "forward": (Vector2(1, 0), Vector2(0, 0)),
+    "reverse": (Vector2(-1, 0), Vector2(0, 0)),
+}
