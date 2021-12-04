@@ -8,24 +8,20 @@ def get_input_data(filename):
 
 def part_1(binary_strings):
     """Count most common bit places in a list of binary strings to
-    find the gamma rate, and find the epsilon rate as the 2's compliment"""
-    half = len(binary_strings) // 2
-    bit_length = len(binary_strings[0])
-    places_lists = [
-        utils.binary_digits_to_places(bin_string)
+    find the gamma rate, and find the epsilon rate as the inverse of the
+    bits"""
+    bit_lists = [
+        utils.bit_list(bin_string)
         for bin_string in binary_strings]
-    all_lists = itertools.chain(*places_lists)
-    bit_counts = utils.count_bits_by_place(all_lists)
 
     # There are only two possibilities (1 and 0), so if the count for a place
-    # exceeds half of the total list of strings, 1 is more common than 0
-    most_common = [
-        place for place in bit_counts.keys() if bit_counts[place] > half]
+    # exceeds half of the total list of entries, 1 is more common than 0
+    most_common = utils.most_common_bits(bit_lists)
+    least_common = [0 if i else 1 for i in most_common]
 
-    gamma = sum(most_common)
-    print("Gamma", gamma, "=", bin(gamma))
+    gamma = sum([2**exp * b for exp, b in enumerate(most_common[::-1])])
     # Flip the bits to get the least common ones
-    epsilon = utils.bitwise_not(gamma, bitsize=bit_length)
+    epsilon = sum([2**exp * b for exp, b in enumerate(least_common[::-1])])
 
     return gamma * epsilon
 
