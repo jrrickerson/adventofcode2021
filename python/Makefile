@@ -14,6 +14,8 @@ setup:
 		jinja2 solve.py.j2 -D DAY=$(DAY) -D DAY_NAME="$(DAY_NAME)" > $(DAY_DIR)/solve.py
 	touch "$(DAY_DIR)/utils.py"
 	touch "$(DAY_DIR)/test_solve.py"
+	touch "../puzzles/day-$(DAY_NAME).txt"
+	touch "../puzzles/day-$(DAY_NAME).input"
 
 # Open solution script in editor
 edit:
