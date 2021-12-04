@@ -44,7 +44,8 @@ def bitwise_not(int_val, bitsize=None):
 
 def most_common(values):
     counts = Counter(values)
-    return counts.most_common(1)[0][0]
+    top_values = counts.most_common()
+    return [value[0] for value in top_values if value[1] >= top_values[0][1]]
 
 
 def most_common_bits(bit_lists):
@@ -55,7 +56,11 @@ def most_common_bits(bit_lists):
     most_common_values = []
     for bit_idx in range(bit_length):
         bit_values = [bit_list[bit_idx] for bit_list in bit_lists]
-        most_common_values.append(most_common(bit_values))
+        most_common_value = most_common(bit_values)
+        if len(most_common_value) > 1:
+            most_common_values.append(1)
+        else:
+            most_common_values.append(most_common_value[0])
 
     return most_common_values
 

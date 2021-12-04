@@ -14,20 +14,54 @@ def part_1(binary_strings):
         utils.bit_list(bin_string)
         for bin_string in binary_strings]
 
-    # There are only two possibilities (1 and 0), so if the count for a place
-    # exceeds half of the total list of entries, 1 is more common than 0
     most_common = utils.most_common_bits(bit_lists)
+    # Flip the bits to get the least common ones
     least_common = [0 if i else 1 for i in most_common]
 
     gamma = sum([2**exp * b for exp, b in enumerate(most_common[::-1])])
-    # Flip the bits to get the least common ones
     epsilon = sum([2**exp * b for exp, b in enumerate(least_common[::-1])])
 
     return gamma * epsilon
 
 
-def part_2(input_data):
-    pass
+def part_2(binary_strings):
+    bit_lists = [
+        utils.bit_list(bin_string)
+        for bin_string in binary_strings]
+
+    oxygen_values = bit_lists.copy()
+    bit_pos = 0
+    while len(oxygen_values) > 1:
+        most_common = utils.most_common(
+            [bit[bit_pos] for bit in oxygen_values])
+        filter_val = 1 if len(most_common) > 1 else most_common[0]
+        print(f"Bit {bit_pos} most common {filter_val}")
+        oxygen_values = [
+            bits for bits in oxygen_values if bits[bit_pos] == filter_val]
+        print(oxygen_values)
+        bit_pos += 1
+
+    oxygen_generator_rating = sum(
+        [2**exp * b for exp, b in enumerate(oxygen_values[0][::-1])])
+    print("Oxygen:", oxygen_generator_rating)
+
+    co2_values = bit_lists.copy()
+    bit_pos = 0
+    while len(co2_values) > 1:
+        most_common = utils.most_common([bit[bit_pos] for bit in co2_values])
+        filter_val = 1 if len(most_common) > 1 else most_common[0]
+        # Flip the bit to get least common value
+        filter_val = filter_val ^ 1
+        print(f"Bit {bit_pos} most common {filter_val}")
+        co2_values = [
+            bits for bits in co2_values if bits[bit_pos] == filter_val]
+        bit_pos += 1
+
+    co2_scrubber_rating = sum(
+        [2**exp * b for exp, b in enumerate(co2_values[0][::-1])])
+    print("CO2:", co2_scrubber_rating)
+
+    return oxygen_generator_rating * co2_scrubber_rating
 
 
 def main(input_file):

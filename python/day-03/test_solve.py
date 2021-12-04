@@ -119,3 +119,113 @@ def test_part1_sample_input():
     result = solve.part_1(binary_strings)
 
     assert result == 198
+
+
+def most_common_empty_iterable():
+    values = []
+    expected = None
+
+    result = utils.most_common(values)
+
+    assert result == expected
+
+
+def most_common_single_value():
+    values = [
+        1, 0, 1, 1, 0, 1, 1, 0]
+    expected = [1]
+
+    result = utils.most_common(values)
+
+    assert result == expected
+
+
+def test_most_common_bits():
+    bit_lists = [
+        [0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 0],
+        [1, 0, 1, 1, 0],
+        [1, 0, 1, 1, 1],
+        [1, 0, 1, 0, 1],
+        [0, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1],
+        [1, 1, 1, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 1, 0, 0, 1],
+        [0, 0, 0, 1, 0],
+        [0, 1, 0, 1, 0],
+    ]
+    expected = [1, 0, 1, 1, 0]
+
+    result = utils.most_common_bits(bit_lists)
+
+    assert result == expected
+
+
+def test_filter_by_places_no_filter():
+    places = [1, 2, 4, 8]
+    places_lists = [
+        [1],
+        [2, 8],
+        [1, 4],
+        [8]
+    ]
+    filter_places = []
+    expected = [1]
+
+    results = utils.filter_by_places(places_lists, places, filter_places)
+
+    assert results == expected
+
+
+def test_filter_by_places_single_place_filter():
+    places = [1, 2, 4, 8]
+    places_lists = [
+        [1, 2],
+        [2, 8],
+        [1, 4],
+        [8]
+    ]
+    filter_places = [8]
+    expected = [8]
+
+    results = utils.filter_by_places(places_lists, places, filter_places)
+
+    assert results == expected
+
+
+def test_filter_by_places_multi_place_filter():
+    places = [1, 2, 4, 8]
+    places_lists = [
+        [1, 2],
+        [2, 8],
+        [1, 4],
+        [8]
+    ]
+    filter_places = [2, 4]
+    expected = [1, 4]
+
+    results = utils.filter_by_places(places_lists, places, filter_places)
+
+    assert results == expected
+
+
+def test_part2_sample_input():
+    binary_strings = [
+        "00100",
+        "11110",
+        "10110",
+        "10111",
+        "10101",
+        "01111",
+        "00111",
+        "11100",
+        "10000",
+        "11001",
+        "00010",
+        "01010",
+    ]
+
+    result = solve.part_2(binary_strings)
+
+    assert result == 230
