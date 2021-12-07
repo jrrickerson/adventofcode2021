@@ -6,6 +6,8 @@ def get_input_data(filename):
 
 
 def part_1(input_data):
+    """Given input of bingo draws and cards, figure out the score
+    of the card that wins the game first"""
     draws = utils.get_draws_from_input(input_data[0])
     cards = utils.get_cards_from_input(input_data[1:])
 
@@ -17,7 +19,21 @@ def part_1(input_data):
 
 
 def part_2(input_data):
-    pass
+    """Given input of bingo draws and cards, figure out the score
+    of the card that wins the game last"""
+    draws = utils.get_draws_from_input(input_data[0])
+    cards = utils.get_cards_from_input(input_data[1:])
+
+    winners = []
+    for draw in draws:
+        for card in cards:
+            if not card.has_bingo():
+                card.apply_draw(draw)
+                if card.has_bingo():
+                    winners.append(card)
+        if len(winners) == len(cards):
+            break
+    return winners[-1].score_bingo()
 
 
 def main(input_file):

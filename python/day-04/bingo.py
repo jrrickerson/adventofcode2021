@@ -10,6 +10,10 @@ class BingoCard:
         if text_lines:
             self.load_board(text_lines)
 
+    def __str__(self):
+        lines = [' '.join([str(i) for i in row]) for row in self.board]
+        return '\n'.join(lines)
+
     def parse_lines(self, text_lines):
         rows = []
         for line in text_lines:
