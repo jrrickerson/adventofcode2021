@@ -18,6 +18,12 @@ class Vector2:
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
 
+    def __gt__(self, other):
+        return self.x > other.x and self.y > other.y
+
+    def __lt__(self, other):
+        return self.x < other.x and self.y < other.y
+
     def __add__(self, other):
         return Vector2(self.x + other.x, self.y + other.y)
 

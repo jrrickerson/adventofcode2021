@@ -1,3 +1,4 @@
+import math
 from vector import Vector2
 
 
@@ -23,6 +24,11 @@ def is_vertical_segment(vector_start, vector_end):
     return vector_start.x == vector_end.x
 
 
+def is_diagonal_segment(vector_start, vector_end):
+    """Diagonal as defined by a slope of 1 or -1"""
+    return slope(vector_start, vector_end) in (1, -1)
+
+
 def is_nonzero_segment(vector_start, vector_end):
     """Return True if the segment has a nonzero length"""
     return not (
@@ -37,6 +43,11 @@ def sign(val):
     return 0
 
 
+def slope(v1, v2):
+    den = (v1.x - v2.x)
+    return (v1.y - v2.y) / den if den else math.inf
+
+
 def intersect_1d(p1, p2, p3, p4):
     """Find the intersection, if any, of two line segments on the same line"""
     e1, e2 = sorted((p1, p2))
@@ -49,6 +60,32 @@ def intersect_1d(p1, p2, p3, p4):
     return []
 
 
+def line_coeff_from_endpoints(p1, p2):
+    """Given two points on a line, find the coefficients of the line
+    equation ax + by + c = 0"""
+    a = p1.y - p2.y
+    b = p2.x - p1.x
+    c = -a * p1.x - b * p1.y
+    return a, b, c
+
+
+def determinent(a, b, c, d):
+    return a * d - b * c
+
+
+def intersect_2d(v1, v2, v3, v4):
+    """Given 4 vectors representing start and end points of two
+    line segments, find the intersection point, if it exists"""
+    m = line_coeff_from_endpoints(v1, v2)
+    n = line_coeff_from_endpoints(v3, v4)
+
+    zn = determinent(m[0], m[1], n[0], n[1])
+
+    x = -determinent(m[2], m[1], n[2], n[1]) / zn
+    y = -determinent(m[0], m[2], n[0], n[2]) / zn
+
+    return (x, y)
+
 
 def overlapping(segment_a, segment_b):
     """Return a list of integer points within the overlapping line segment
@@ -60,15 +97,30 @@ def overlapping(segment_a, segment_b):
     v3, v4 = segment_b
 
     if v1.x == v2.x == v3.x == v3.x:
-        # Vertical colinear
+        # Vertical colinear - find y delta of midpoints
         return [(v1.x, y) for y in intersect_1d(v1.y, v2.y, v3.y, v4.y)]
     elif v1.y == v2.y == v3.y == v4.y:
-        # Horizontal colinear
+        # Horizontal colinear - find x delta of midpoints
         return [(x, v1.y) for x in intersect_1d(v1.x, v2.x, v3.x, v4.x)]
     else:
-        # Not horizontal or vertical, so we will not get
-        # a whole number for the overlap
-        return []
+        # Diagonal colinear - generate points between the max of left
+        # vector and the min of the right vector endpoints
+        if v2 < v1:
+            v1, v2 = v2, v1
+        if v4 < v3:
+            v3, v4 = v4, v3
+        left = max(v1, v3)
+        right = min(v2, v4)
+        dx = sign(right.x - left.x)
+        dy = sign(right.y - left.y)
+        print("Diagonal interval:", left, right, dx, dy)
+        x, y = left.x, left.y
+        points = [(x, y)]
+        while (x, y) != (right.x, right.y):
+            x += dx
+            y += dy
+            points.append((x, y))
+        return points
 
 
 def intersection_point(v1, v2, v3, v4):
@@ -81,9 +133,28 @@ def intersection_point(v1, v2, v3, v4):
         # First segment is vertical, second is horizontal
         return (v3.x, v1.y)
     else:
-        # Unhandled case
-        print("Degenerate intersection")
-        return None
+        slope1 = slope(v1, v2)
+        slope2 = slope(v3, v4)
+        if (slope1 not in (-1, 0, 1, math.inf) or
+                slope2 not in (-1, 0, 1, math.inf)):
+            print("Slope of line segment outside expectations!")
+        # Ugly brute force for diagonals for now
+        dx1 = sign(v2.x - v1.x)
+        dy1 = sign(v2.y - v1.y)
+        delta1 = max(abs(v1.x - v2.x), abs(v1.y - v2.y))
+        points1 = [
+            (v1.x + dx1 * i, v1.y + dy1 * i)
+            for i in range(delta1 + 1)]
+        #print(f"dx={dx1}, dy={dy1}, Points1", points1)
+        dx2 = sign(v4.x - v3.x)
+        dy2 = sign(v4.y - v3.y)
+        delta2 = max(abs(v3.x - v4.x), abs(v3.y - v4.y))
+        points2 = [
+            (v3.x + dx2 * i, v3.y + dy2 * i)
+            for i in range(delta2 + 1)]
+        #print(f"dx={dx2}, dy={dy2}, Points2", points2)
+        intersecting = set(points1) & set(points2)
+        return intersecting.pop() if intersecting else None
 
 
 def intersections(segment_a, segment_b):
@@ -107,6 +178,6 @@ def intersections(segment_a, segment_b):
         return overlapping(segment_a, segment_b)
     if (sign(a1.cross_to(a2, b1)) != sign(a1.cross_to(a2, b2)) and
             sign(b1.cross_to(b2, a1)) != sign(b1.cross_to(b2, a2))):
-        intersect = intersection_point(a1, a2, b1, b2)
-        return [intersect] if intersect else []
+        point = intersect_2d(a1, a2, b1, b2)
+        return [(int(point[0]), int(point[1]))] if point else []
     return []

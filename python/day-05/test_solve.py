@@ -178,6 +178,27 @@ def test_intersections_overlapping_segments():
     assert all([(9, y) in points for y in range(3, 6)])
 
 
+def test_intersections_diagonal_segments():
+    segment_a = (vector.Vector2(1, 1), vector.Vector2(5, 5))
+    segment_b = (vector.Vector2(5, 1), vector.Vector2(1, 5))
+
+    points = utils.intersections(segment_a, segment_b)
+
+    assert len(points) == 1
+    assert (3, 3) in points
+
+
+def test_intersections_overlapping_diagonal_segments():
+    segment_a = (vector.Vector2(1, 1), vector.Vector2(4, 4))
+    segment_b = (vector.Vector2(6, 6), vector.Vector2(3, 3))
+
+    points = utils.intersections(segment_a, segment_b)
+
+    assert len(points) == 2
+    assert (3, 3) in points
+    assert (4, 4) in points
+
+
 def test_part1_sample_input():
     input_lines = [
         "0,9 -> 5,9",
@@ -195,3 +216,67 @@ def test_part1_sample_input():
     result = solve.part_1(input_lines)
 
     assert result == 5
+
+
+def test_slope_zero():
+    v1 = vector.Vector2(0, 0)
+    v2 = vector.Vector2(5, 0)
+
+    slope = utils.slope(v1, v2)
+
+    assert slope == 0
+
+
+def test_slope_positive():
+    v1 = vector.Vector2(0, 0)
+    v2 = vector.Vector2(5, 5)
+
+    slope = utils.slope(v1, v2)
+
+    assert slope == 1
+
+
+def test_slope_negative():
+    v1 = vector.Vector2(9, 7)
+    v2 = vector.Vector2(7, 9)
+
+    slope = utils.slope(v1, v2)
+
+    assert slope == -1
+
+
+def test_is_diagonal_increasing_slope():
+    v1 = vector.Vector2(0, 0)
+    v2 = vector.Vector2(5, 5)
+
+    result = utils.is_diagonal_segment(v1, v2)
+
+    assert result is True
+
+
+def test_is_diagonal_non_matching_coordinates():
+    v1 = vector.Vector2(0, 1)
+    v2 = vector.Vector2(5, 7)
+
+    result = utils.is_diagonal_segment(v1, v2)
+
+    assert result is False
+
+
+def test_part2_sample_input():
+    input_lines = [
+        "0,9 -> 5,9",
+        "8,0 -> 0,8",
+        "9,4 -> 3,4",
+        "2,2 -> 2,1",
+        "7,0 -> 7,4",
+        "6,4 -> 2,0",
+        "0,9 -> 2,9",
+        "3,4 -> 1,4",
+        "0,0 -> 8,8",
+        "5,5 -> 8,2",
+    ]
+
+    result = solve.part_2(input_lines)
+
+    assert result == 12

@@ -20,8 +20,6 @@ def part_1(input_data):
         if not (utils.is_horizontal_segment(*segment) or
                 utils.is_vertical_segment(*segment)):
             continue
-        if segment in segments:
-            print("Repeat segment!")
         segments.append(segment)
 
     # Find all unique pairs of segments and test for intersections
@@ -29,16 +27,30 @@ def part_1(input_data):
     intersection_points = Counter()
     for segment_pair in itertools.combinations(segments, 2):
         intersections = utils.intersections(*segment_pair)
-        if len(intersections) > 1:
-            print(f"Overlap: {len(intersections)} - {segment_pair}")
         for point in intersections:
             intersection_points[point] += 1
-    #print(intersection_points.most_common(10))
     return len(intersection_points)
 
 
 def part_2(input_data):
-    pass
+    segments = []
+    # Parse and filter out any segments that are not
+    # horizontal or vertical
+    for line in input_data:
+        segment = utils.parse_vector_pairs(line)
+        # Skip zero-length segments
+        if not utils.is_nonzero_segment(*segment):
+            continue
+        segments.append(segment)
+
+    # Find all unique pairs of segments and test for intersections
+    # Keep an index of intersection points and counts
+    intersection_points = Counter()
+    for segment_pair in itertools.combinations(segments, 2):
+        intersections = utils.intersections(*segment_pair)
+        for point in intersections:
+            intersection_points[point] += 1
+    return len(intersection_points)
 
 
 def main(input_file):
