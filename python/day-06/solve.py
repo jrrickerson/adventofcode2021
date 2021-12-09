@@ -8,9 +8,9 @@ def get_input_data(filename):
 def part_1(input_data):
     fish = utils.parse_lanternfish(input_data[0])
 
-    final_gen = utils.find_generation(fish, 80)
+    final_gen = utils.find_generation_counts(fish, 80)
 
-    return len(final_gen)
+    return sum(final_gen.values())
 
 
 def part_2(input_data):
