@@ -13,9 +13,12 @@ def part_1(input_data):
     return len(final_gen)
 
 
-
 def part_2(input_data):
-    pass
+    fish = utils.parse_lanternfish(input_data[0])
+
+    final_gen = utils.find_generation_counts(fish, 256)
+
+    return sum(final_gen.values())
 
 
 def main(input_file):
