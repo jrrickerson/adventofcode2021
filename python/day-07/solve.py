@@ -1,3 +1,4 @@
+import statistics
 import utils
 
 
@@ -13,7 +14,20 @@ def part_1(input_data):
 
 
 def part_2(input_data):
-    pass
+    positions = utils.parse_horizontal_positions(input_data[0])
+    mean = round(statistics.mean(positions))
+    median = round(statistics.median(positions))
+    min_fuel = None
+    start, end = min(median, mean), max(median, mean)
+    # Check from median to mean just to be sure rounding errors aren't
+    # affecting the result
+    for center_point in range(start, end + 1):
+        spent_fuel = sum(
+            utils.nth_triangular_distances(positions, center_point))
+        if not min_fuel or spent_fuel < min_fuel:
+            min_fuel = spent_fuel
+
+    return min_fuel
 
 
 def main(input_file):
